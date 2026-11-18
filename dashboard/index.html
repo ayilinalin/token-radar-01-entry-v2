@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar 3 — every pre-token protocol, ranked by launch value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="shell">
+<header class="top">
+<div class="brand"><span class="mark"></span><span class="brand-name">TOKEN RADAR</span><span class="version">radar-3</span></div>
+<div class="top-meta" id="top-meta"></div>
+</header>
+<section class="lede">
+<div>
+<h1>Every protocol with no token yet, ranked by what its launch would be worth.</h1>
+<p>One sealed snapshot of every protocol DefiLlama tracks. This board keeps only the
+protocols that record no token and are not a wrapped, staked or bridged product of one
+that trades, then ranks them by an implied launch value computed from the snapshot's
+own figures. Click any row for the full breakdown and the farm plan.</p>
+</div>
+<div class="facts" id="facts"></div>
+</section>
+<main id="board" aria-busy="true"></main>
+<section class="method" id="method">
+<h2>How the radar scores</h2>
+<p>Implied value is the entry's own claim, never a market price, and it never predicts
+whether or when a token is issued. It is computed from five factors, all derived from
+the snapshot at build time, with no protocol name ever special-cased:</p>
+<p class="formula">implied = TVL x catMultiple x growthMult x maturityMult x chainMult x depthMult</p>
+<ul class="factor-list">
+<li><b>catMultiple</b> — the category's live-token mcap/TVL median, shrunk toward the
+global median by peer count: (n x median + 4 x global) / (n + 4), clamped to 0.05–1.0.
+A category with one live peer cannot pin the board to that peer's ratio; a category
+with no live peer falls back to the global median.</li>
+<li><b>growthMult</b> — 1 + growth x 0.009 when TVL rose over seven days, 1 + growth x 0.012
+when it fell (growth clamped to -60..120%). Users leaving is a louder signal than
+users arriving, so a shrinking protocol loses value faster than a growing one gains it.</li>
+<li><b>maturityMult</b> — 0.55 + 0.35 x min(age, 1095)/1095 - 0.10 x years past three.
+One to three years with no token is prime: young enough to still launch, old enough to
+have proved it lasts. A protocol past four years has had its chances, so its factor
+decays; unknown age counts as 365 days.</li>
+<li><b>chainMult</b> — 1 + 0.015 x chains (at most 8) + 0.02 when Ethereum is one of them.
+More chains mean more places to farm and deeper liquidity to launch into.</li>
+<li><b>depthMult</b> — 0.95 + 0.10 x n/(n+5), where n is the category's live-peer count.
+A category where tokens already trade has proven demand for the next one.</li>
+</ul>
+<h3>How the farm plans are built</h3>
+<p>Every row carries seven steps, each with a cost and a time. Capital follows the
+protocol's TVL: $300 above $5B, $200 above $1B, $100 above $100M, $50 below that.
+Gas is priced per chain (Ethereum about $12 a transaction, most L2s under $0.50,
+Solana about $0.02), the hold is 60 days for protocols under six months old, 45 days
+under a year, 30 days after that, and the exit is always two withdrawals a day apart.
+The action itself follows the category: a curator vault for risk curators, a supply
+position for lenders, a liquidity position for DEXs, and so on.</p>
+<h3>What is left out, and why</h3>
+<p>Bridges, canonical bridges, liquid staking and restaking receipts, restaked BTC,
+exchanges, versioned pools and names carrying wrapped, staked or staking are set aside:
+a receipt is not a launch waiting to happen. The board also separates the two sides
+of the market: the Pre-token tab ranks what may come, the Live token tab shows the 24
+largest protocols whose token already trades, with the market's own capitalisation, so
+the multiples above can be checked against real prices.</p>
+</section>
+<footer>
+<p>Snapshot as of <span id="foot-date"></span>, from DefiLlama's public API. "Records no
+token" means the snapshot entry carries no market cap, no CoinGecko id and no symbol:
+a statement about the snapshot, not a claim that the protocol has no token. This radar
+does not predict whether or when any token is issued.</p>
+</footer>
+</div>
+<dialog class="detail" id="detail"></dialog>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
